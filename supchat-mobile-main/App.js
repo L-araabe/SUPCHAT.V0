@@ -1,10 +1,23 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import LoginScreen from './screens/LoginScreen';
 
 export default function App() {
+  const [user, setUser] = useState(null);
+
+  if (!user) {
+    return (
+      <View style={{ flex: 1 }}>
+        <LoginScreen onSignedIn={setUser} />
+        <StatusBar style="auto" />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <Text>Welcome to SUPChat mobile!</Text>
+      <Text>Welcome {user?.user?.name || 'User'}!</Text>
       <StatusBar style="auto" />
     </View>
   );
