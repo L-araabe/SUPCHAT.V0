@@ -1,7 +1,4 @@
-if4j4t-codex/créer-dockerfiles-et-docker-compose-avec-readme
-=======
 version: '3'
-main
 services:
   backend:
     build: ./supchat-backend-main
