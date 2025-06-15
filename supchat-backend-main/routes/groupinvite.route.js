@@ -6,6 +6,7 @@ const { protect } = require("../middleware/auth");
 router.use(protect);
 
 router.post("/", protect, inviteCtrl.sendInvite);
+router.post("/email", protect, inviteCtrl.sendInviteByEmail);
 router.get("/received", protect, inviteCtrl.getReceivedInvites);
 router.get("/received/:groupId", protect, inviteCtrl.getReceivedInvitesById);
 router.get("/sent", protect, inviteCtrl.getSentInvites);
