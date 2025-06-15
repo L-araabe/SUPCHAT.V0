@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl } from 'react-native';
 import { API_URL } from '../constants/api';
+import Header from '../components/Header';
 
 
 export default function ChatListScreen({ user, onSelectChat }) {
-=======
-export default function ChatListScreen({ user }) {
 
   const [chats, setChats] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -34,18 +33,14 @@ export default function ChatListScreen({ user }) {
   }, []);
 
   const renderItem = ({ item }) => (
-
     <TouchableOpacity style={styles.chatItem} onPress={() => onSelectChat && onSelectChat(item)}>
       <Text style={styles.chatTitle}>{item.chatName || 'Private Chat'}</Text>
     </TouchableOpacity>
-
-    <View style={styles.chatItem}>
-      <Text style={styles.chatTitle}>{item.chatName || 'Private Chat'}</Text>
-    </View>
   );
 
   return (
     <View style={styles.container}>
+      <Header title={`Welcome ${user?.user?.name || ''}`} />
       <FlatList
         data={chats}
         keyExtractor={(item) => item._id}
