@@ -29,7 +29,7 @@ import {
   useMarAsSeenMutation,
 } from "../../redux/apis/message";
 import Modal from "../../component/NewGroup";
-import ProfileModal from "../../component/profileModa";
+import ProfileModal from "../../component/profileModal";
 import ProfileDetailModal from "../../component/profileDetailModal";
 import InfoModal from "../../component/UsersModal";
 import infoIcon from "../../assets/icons/info_Icon.png";
