@@ -89,11 +89,15 @@ exports.getChatById = catchAsync(async (req, res) => {
 exports.deleteChat = catchAsync(async (req, res) => {
   const chatId = req.params.id;
 
-  const chat = await Chat.findByIdAndDelete(chatId);
+  const chat = await Chat.findById(chatId);
+  if (!chat) throw new AppError("Chat not found", 404);
 
-  if (!chat) {
-    throw new AppError("Chat not found or already deleted", 404);
+  const isAdmin = ["admin", "superAdmin"].includes(req.user.role);
+  const isGroupAdmin = chat.groupAdmin?.toString() === req.user._id.toString();
+  if (!isAdmin && !isGroupAdmin) {
+    throw new AppError("Not authorized to delete this chat", 403);
   }
+  await chat.deleteOne();
 
   res.status(200).json({
     status: "success",
