@@ -42,3 +42,11 @@ npm run dev
 
 The backend starts with `nodemon` so changes are reloaded automatically.
 
+Inside `supchat-mobile-main` run:
+
+```bash
+npm start
+```
+
+This launches the Expo development server for the React Native mobile app.
+
