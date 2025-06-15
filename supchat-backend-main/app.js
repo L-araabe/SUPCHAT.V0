@@ -59,7 +59,7 @@ const server = app.listen(PORT, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTENT_URL, // your frontend URL
+    origin: process.env.FRONTEND_URL, // your frontend URL
     methods: ["GET", "POST"],
   },
 });

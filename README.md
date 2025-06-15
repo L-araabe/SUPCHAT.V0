@@ -15,5 +15,6 @@ The backend will be available on [http://localhost:5000](http://localhost:5000)
 and the frontend on [http://localhost:3000](http://localhost:3000).
 
 Environment variables for the backend are defined in `env.txt` and loaded
-automatically by Docker Compose.
+automatically by Docker Compose. The `FRONTEND_URL` variable should be set to the
+address of the frontend so Socket.IO CORS settings work correctly.
 
