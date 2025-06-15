@@ -1,10 +1,26 @@
 {
   "expo": {
-    "name": "supchat-mobile",
-    "slug": "supchat-mobile",
+    "name": "supchat-mobile-main",
+    "slug": "supchat-mobile-main",
     "version": "1.0.0",
-    "sdkVersion": "50.0.0",
-    "platforms": ["ios", "android", "web"],
-    "assetBundlePatterns": ["**/*"]
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "supchatmobilemain",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true
+    },
+    
+    "experiments": {
+      "typedRoutes": true
+    }
   }
 }

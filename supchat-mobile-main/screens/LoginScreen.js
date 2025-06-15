@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
-const API_URL = 'http://localhost:5000/api/v1';
+const API_URL = 'http://192.168.1.174:5000/api/v1';
+
 
 export default function LoginScreen({ onSignedIn }) {
   const [email, setEmail] = useState('');
