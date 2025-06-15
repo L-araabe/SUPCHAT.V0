@@ -85,6 +85,40 @@ exports.getChatById = catchAsync(async (req, res) => {
   });
 });
 
+// ✅ Get or create a private chat between two users
+exports.getOrCreatePrivateChat = catchAsync(async (req, res) => {
+  const otherUserId = req.params.userId;
+  const userId = req.user._id;
+
+  if (!otherUserId) {
+    throw new AppError("User ID is required", 400);
+  }
+
+  let chat = await Chat.findOne({
+    isGroupChat: false,
+    isChannel: { $ne: true },
+    users: { $all: [userId, otherUserId], $size: 2 },
+  })
+    .populate("users", "-password")
+    .populate({
+      path: "latestMessage",
+      populate: { path: "sender", select: "name email" },
+    });
+
+  if (!chat) {
+    chat = await Chat.create({ users: [userId, otherUserId] });
+
+    chat = await Chat.findById(chat._id)
+      .populate("users", "-password")
+      .populate({
+        path: "latestMessage",
+        populate: { path: "sender", select: "name email" },
+      });
+  }
+
+  res.status(200).json({ status: "success", data: chat });
+});
+
 // ✅ Delete a chat
 exports.deleteChat = catchAsync(async (req, res) => {
   const chatId = req.params.id;

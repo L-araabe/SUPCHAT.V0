@@ -6,6 +6,7 @@ const { protect } = require("../middleware/auth"); // auth middleware
 router.post("/", protect, chatController.createChat);
 router.get("/", protect, chatController.getUserChats);
 router.get("/:id", protect, chatController.getChatById);
+router.get("/private/:userId", protect, chatController.getOrCreatePrivateChat);
 router.delete("/:id", protect, chatController.deleteChat);
 router.put("/rename", protect, chatController.renameGroupChat);
 router.post("/adduser", protect, chatController.addUserToGroup);
