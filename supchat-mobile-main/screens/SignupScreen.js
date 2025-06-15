@@ -2,28 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { API_URL } from '../constants/api';
 
-
-export default function LoginScreen({ onSignedIn, onSwitchToSignup }) {
+export default function SignupScreen({ onSignedUp, onSwitchToLogin }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) return;
+  const handleSignup = async () => {
+    if (!name || !email || !password || !confirmPassword) return;
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
     setLoading(true);
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
       const data = await response.json();
       if (data.status === 'success') {
-        onSignedIn && onSignedIn(data.data);
+        onSignedUp && onSignedUp();
+        Alert.alert('Success', 'Account created, please log in');
       } else {
-        Alert.alert('Login failed', data.message || 'Unable to login');
+        Alert.alert('Signup failed', data.message || 'Unable to sign up');
       }
     } catch (err) {
       Alert.alert('Error', 'Could not connect to server');
@@ -34,7 +40,13 @@ export default function LoginScreen({ onSignedIn, onSwitchToSignup }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Sign Up</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Name"
+        value={name}
+        onChangeText={setName}
+      />
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -50,11 +62,18 @@ export default function LoginScreen({ onSignedIn, onSwitchToSignup }) {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        <Text style={styles.buttonText}>{loading ? 'Logging in...' : 'Login'}</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Confirm Password"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+      />
+      <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={loading}>
+        <Text style={styles.buttonText}>{loading ? 'Signing up...' : 'Sign Up'}</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={onSwitchToSignup} style={styles.linkContainer}>
-        <Text style={styles.link}>No account? Sign up</Text>
+      <TouchableOpacity onPress={onSwitchToLogin} style={styles.linkContainer}>
+        <Text style={styles.link}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
