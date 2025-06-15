@@ -1,6 +1,8 @@
 const GroupInvite = require("../models/groupinvite.model");
 
 const Chat = require("../models/chat.model");
+const User = require("../models/user.model");
+const emailService = require("../utils/email");
 const { AppError, catchAsync } = require("../utils/errorHandler");
 
 // ✅ Send an invite to a user
@@ -21,6 +23,50 @@ exports.sendInvite = catchAsync(async (req, res) => {
   }
 
   const invite = await GroupInvite.create({ group, invitedUser, invitedBy });
+
+  res.status(201).json({
+    status: "success",
+    data: invite,
+  });
+});
+
+// ✅ Send an invite to a user by email
+exports.sendInviteByEmail = catchAsync(async (req, res) => {
+  const { group, email } = req.body;
+  const invitedBy = req.user.id;
+
+  const chat = await Chat.findById(group);
+  if (!chat) {
+    throw new AppError("Group chat not found or not a group chat", 400);
+  }
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new AppError("User with this email not found", 404);
+  }
+
+  const existing = await GroupInvite.findOne({ group, invitedUser: user._id });
+  if (existing) {
+    throw new AppError("User has already been invited to this group", 409);
+  }
+
+  const invite = await GroupInvite.create({
+    group,
+    invitedUser: user._id,
+    invitedBy,
+  });
+
+  const inviteUrl = `${process.env.FRONTEND_URL}/groups/${group}`;
+  try {
+    await emailService.sendEmail({
+      to: user.email,
+      subject: "Group Invitation",
+      html: `<p>You have been invited to join a group.</p><p><a href="${inviteUrl}">Open Group</a></p>`,
+      text: `You have been invited to join a group: ${inviteUrl}`,
+    });
+  } catch (error) {
+    console.error("Error sending invite email", error);
+  }
 
   res.status(201).json({
     status: "success",
