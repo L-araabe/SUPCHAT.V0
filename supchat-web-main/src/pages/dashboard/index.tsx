@@ -474,6 +474,7 @@ const ChatDashboard = () => {
         isAdmin={selectedChat?.groupAdmin?._id === user?.id ? true : false}
         setChat={setSelectedChat}
         socket={sendMessageToAdmin}
+        setChats={setChats}
       >
         <p></p>
       </InfoModal>
