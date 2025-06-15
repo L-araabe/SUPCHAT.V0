@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import {
   useLazyGetChatsQuery,
   useCreateChatMutation,
+  useGetPrivateChatMutation,
   useLazyReceiveInviteQuery,
   useAcceptInviteMutation,
   useRejectInviteMutation,
@@ -72,6 +73,7 @@ const ChatDashboard = () => {
       // error: createChatError,
     },
   ] = useCreateChatMutation();
+  const [getPrivateChat] = useGetPrivateChatMutation();
 
   const [isLogoutVisible, setIsLogoutVisible] = useState(false);
   const dispatch = useDispatch();
@@ -97,32 +99,24 @@ const ChatDashboard = () => {
   const selectedChatIdRef = useRef(selectedChatID);
   const messageEndRef = useRef(null);
 
-  const addChatToChats = (chat: any) => {
+  const addChatToChats = async (chat: any) => {
     setDisplayFriendsList(false);
     if (chat?._id === user?.id) {
       toast("cannot add your self");
       return;
     }
-    const filterd = chats.find((item) =>
-      item?.users?.some((user) => user._id === chat._id)
-    );
-
-    if (filterd !== undefined) {
-      if (Object?.keys(filterd)?.length > 0) {
-        toast("already added.");
-        return;
+    try {
+      const response = await getPrivateChat({ userId: chat._id }).unwrap();
+      if (response.status === "success") {
+        const exists = chats.find((item) => item?._id === response.data._id);
+        if (!exists) {
+          setChats([response.data, ...chats]);
+          setOriginalChats([response.data, ...chats]);
+        }
       }
+    } catch (e) {
+      toast(e?.data?.message);
     }
-    const newChat = {
-      isGroupChat: false,
-      isChannel: false,
-      createChat: false,
-      chatName: chat?.name,
-      users: [user?.id, chat._id],
-      groupAdmin: "",
-      onlyAdminCanMessage: false,
-    };
-    createChatFunction(newChat);
   };
 
   const getUnreadMessagesCount = async (chatid) => {

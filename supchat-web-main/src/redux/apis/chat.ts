@@ -46,6 +46,14 @@ export const chatApi = createApi({
         };
       },
     }),
+    getPrivateChat: builder.mutation({
+      query({ userId }: { userId: string }) {
+        return {
+          url: `/chat/private/${userId}`,
+          method: "GET",
+        };
+      },
+    }),
     setPermission: builder.mutation({
       query({ chatId, value }: { chatId: string; value: boolean }) {
         return {
@@ -136,4 +144,5 @@ export const {
   useRemoveMemberMutation,
   useAddMemberMutation,
   useDeleteChatMutation,
+  useGetPrivateChatMutation,
 } = chatApi;
