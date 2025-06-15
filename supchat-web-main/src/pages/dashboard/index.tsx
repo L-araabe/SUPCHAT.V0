@@ -6,6 +6,7 @@ import {
   FaTimes,
   FaUserFriends,
   FaPaperclip,
+  FaSmile,
 } from "react-icons/fa";
 import { FiSend } from "react-icons/fi";
 import { socket } from "../../../script/socket";
@@ -34,6 +35,7 @@ import ProfileDetailModal from "../../component/profileDetailModal";
 import InfoModal from "../../component/UsersModal";
 import infoIcon from "../../assets/icons/info_Icon.png";
 import { uploadToCloudinary } from "../../../script/cloudinaryUpload";
+import EmojiPicker from "../../component/EmojiPicker";
 
 const ChatDashboard = () => {
   const user = useSelector((state) => state?.user?.user);
@@ -87,6 +89,7 @@ const ChatDashboard = () => {
   const [isSideBarVisible, setIsSideBarVisible] = useState(false);
   const [groupStatus, setGroupStatus] = useState<string>("");
   const [receivedInviteId, setReceiveInviteid] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const logout = () => {
     dispatch(resetUser());
@@ -315,6 +318,11 @@ const ChatDashboard = () => {
         imageUrl: imageUrl,
       },
     ]);
+  };
+
+  const handleEmojiSelect = (emoji: string) => {
+    setMessage((prev) => prev + emoji);
+    setShowEmojiPicker(false);
   };
 
   const searchFriendEmail = async (friendSearch: string) => {
@@ -938,7 +946,15 @@ const ChatDashboard = () => {
                       />
                     </div>
                   )}
-                  <div className="p-3 sm:p-4 border-t border-primary bg-dark flex items-center gap-2">
+                  <div className="p-3 sm:p-4 border-t border-primary bg-dark flex items-center gap-2 relative">
+                    {showEmojiPicker && (
+                      <div className="absolute bottom-12 left-0 z-10">
+                        <EmojiPicker onSelect={handleEmojiSelect} />
+                      </div>
+                    )}
+                    <button type="button" onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+                      <FaSmile />
+                    </button>
                     <input
                       type="text"
                       value={message}
