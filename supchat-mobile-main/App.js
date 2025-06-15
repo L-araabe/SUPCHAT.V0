@@ -4,12 +4,16 @@ import { StatusBar } from 'expo-status-bar';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import ChatListScreen from './screens/ChatListScreen';
+
 import ChatScreen from './screens/ChatScreen';
+
 
 export default function App() {
   const [user, setUser] = useState(null);
   const [screen, setScreen] = useState('login');
+
   const [chat, setChat] = useState(null);
+
 
   if (!user) {
     return (
@@ -26,11 +30,15 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }}>
+
       {chat ? (
         <ChatScreen chat={chat} user={user} onBack={() => setChat(null)} />
       ) : (
         <ChatListScreen user={user} onSelectChat={setChat} />
       )}
+=======
+      <ChatListScreen user={user} />
+
       <StatusBar style="auto" />
     </View>
   );
