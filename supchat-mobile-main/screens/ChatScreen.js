@@ -9,7 +9,7 @@ export default function ChatScreen({ chat, user, onBack }) {
 
   const fetchMessages = async () => {
     try {
-      const res = await fetch(`${API_URL}/messages/${chat._id}`, {
+      const res = await fetch(`${API_URL}/message/${chat._id}`, {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
@@ -31,7 +31,7 @@ export default function ChatScreen({ chat, user, onBack }) {
     if (!text.trim()) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}/messages`, {
+      const res = await fetch(`${API_URL}/message`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

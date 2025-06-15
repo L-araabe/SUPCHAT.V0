@@ -36,9 +36,6 @@ export default function App() {
       ) : (
         <ChatListScreen user={user} onSelectChat={setChat} />
       )}
-=======
-      <ChatListScreen user={user} />
-
       <StatusBar style="auto" />
     </View>
   );
