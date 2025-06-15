@@ -8,6 +8,7 @@ import {
   useRemoveMemberMutation,
   useSendGroupInviteMutation,
   useSetPermissionMutation,
+  useDeleteChatMutation,
 } from "../redux/apis/chat";
 import { useSelector } from "react-redux";
 import ToggleButton from "./ToggleButton";
@@ -22,6 +23,7 @@ interface modalProps {
   userids: any;
   isAdmin: boolean;
   socket: any;
+  setChats: any;
 }
 
 const InfoModal = ({
@@ -34,11 +36,13 @@ const InfoModal = ({
   isAdmin,
   setChat,
   socket,
+  setChats,
 }: modalProps) => {
   const user = useSelector((state) => state?.user?.user);
   const [setPermission, {}] = useSetPermissionMutation();
   const [addMember, {}] = useAddMemberMutation();
   const [removeMember, {}] = useRemoveMemberMutation();
+  const [deleteChat] = useDeleteChatMutation();
 
   const [sendGroupInvite, {}] = useSendGroupInviteMutation();
   console.log("user idss", userids);
@@ -237,6 +241,25 @@ const InfoModal = ({
             className={`w-full bg-red-400 text-white py-2 rounded-lg hover:bg-red-600 transition mt-4`}
           >
             Leave Group
+          </button>
+        )}
+        {isAdmin && (
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await deleteChat(chat?._id).unwrap();
+                setChats((prev) => prev.filter((c) => c._id !== chat?._id));
+                setChat({});
+                clearAll();
+                onClose();
+              } catch (e) {
+                toast(e?.data?.message);
+              }
+            }}
+            className={`w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition mt-4`}
+          >
+            Delete Channel
           </button>
         )}
         <button

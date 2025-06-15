@@ -119,6 +119,9 @@ export const chatApi = createApi({
         };
       },
     }),
+    deleteChat: builder.mutation({
+      query: (id: string) => ({ url: `/chat/${id}`, method: "DELETE" }),
+    }),
   }),
 });
 
@@ -132,4 +135,5 @@ export const {
   useSetPermissionMutation,
   useRemoveMemberMutation,
   useAddMemberMutation,
+  useDeleteChatMutation,
 } = chatApi;
