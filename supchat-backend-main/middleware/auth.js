@@ -160,7 +160,7 @@ exports.isSuperAdmin = catchAsync(async (req, res, next) => {
 //  */
 exports.isOwnerOrAdmin = (req, res, next) => {
   // const resourceId = req.params[paramName];
-  const isAdmin = ["admin", "superAdmin"].includes(req?.user?.role);
+  const isAdmin = [ROLES.ADMIN, ROLES.SUPER_ADMIN].includes(req?.user?.role);
   // const isOwner = req.user.id === resourceId;
 
   if (!isAdmin) {

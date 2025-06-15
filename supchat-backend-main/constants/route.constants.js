@@ -116,4 +116,6 @@ const RATE_LIMIT = {
   },
 };
 
-module.exports = { ROUTES, PATHS, RATE_LIMIT };
+const ROLES = { USER: "user", ADMIN: "admin", SUPER_ADMIN: "superAdmin", AUTHOR: "author" };
+
+module.exports = { ROUTES, PATHS, RATE_LIMIT, ROLES };
